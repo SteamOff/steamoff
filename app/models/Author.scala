@@ -30,6 +30,10 @@ case class Author(
   locale: Option[String]
 )
 
+object Author {
+  implicit val authorFormat = Json.format[Author]
+}
+
 object AuthorBsonHandler extends BSONDocumentReader[Author] with BSONDocumentWriter[Author] {
   def read(document: BSONDocument): Author = {
     Author(

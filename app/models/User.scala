@@ -13,9 +13,11 @@ import play.modules.reactivemongo.json.collection.JSONCollection
 
 // ReactiveMongo plugin
 import play.modules.reactivemongo._
+import play.modules.reactivemongo.json.BSONFormats._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
+
 case class User(
   id: BSONObjectID,
   author: Author,
@@ -25,11 +27,18 @@ case class User(
   lastActivityAt : DateTime
 ) {
   def name = author.givenName
+  def toJson: JsValue = User.toJson(this)
+  def toJsonString: String = toJson.toString
 }
 
 object User extends Model{
   lazy val collection = db("users")
   lazy val collectionJson = db[JSONCollection]("users")
+
+  implicit val userFormat = Json.format[User]
+
+  def toJson(user: User): JsValue = Json.toJson(user)
+  def toJsonString(user: User): String = toJson(user).toString
 
   def indexes = Seq(
     reactivemongo.api.indexes.Index(
@@ -42,7 +51,7 @@ object User extends Model{
     User(
       id = BSONObjectID.generate,
       author = author,
-      settings = Settings(),
+      settings = Settings(""),
       createdAt = DateTime.now,
       lastActivityAt = DateTime.now,
       steamAccount = None
@@ -98,7 +107,7 @@ object UserBsonHandler extends BSONDocumentReader[User] with BSONDocumentWriter[
     User(
       id = document.getAs[BSONObjectID]("_id").get,
       author = AuthorBsonHandler.read(document.getAs[BSONDocument]("author").get),
-      settings = document.getAs[BSONDocument]("settings").map(SettingsBsonHandler.read(_)).getOrElse(Settings()),
+      settings = document.getAs[BSONDocument]("settings").map(SettingsBsonHandler.read(_)).getOrElse(Settings("")),
       createdAt = new DateTime(document.getAs[BSONDateTime]("createdAt").get.value),
       lastActivityAt = new DateTime(document.getAs[BSONDateTime]("lastActivityAt").get.value)
     )

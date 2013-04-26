@@ -28,9 +28,17 @@ case class SteamUser(
 }
 
 object SteamUser {
+  implicit val steamUserFormat = Json.format[SteamUser]
+
   implicit val avatarSizeMapWriter: Writes[Map[AvatarSize.AvatarSize, String]] = (
     __.write[Map[String, String]].contramap{ (m: Map[AvatarSize.AvatarSize, String]) =>
       m.map { case (k, v) => (k.toString -> v) }
+    }
+  )
+
+  implicit val avatarSizeMapReader: Reads[Map[AvatarSize.AvatarSize, String]] = (
+    __.read[Map[String, String]].map{ (m: Map[String, String]) =>
+      m.map { case (k, v) => (AvatarSize.withName(k) -> v) }
     }
   )
 
