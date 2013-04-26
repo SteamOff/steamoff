@@ -1,4 +1,4 @@
-@(id: String, header: String)(preModal: Html)(content: Html)(footer: Html)(postModal: Html)
+@(id: String, header: String)(preModal: Html)(content: Html)(footer: Html)(postModal: Html)(implicit user: User, lang: Lang)
 
 @preModal
 <div id="@id" class="modal fade">

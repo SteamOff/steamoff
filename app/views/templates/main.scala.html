@@ -1,4 +1,4 @@
-@()
+@()(implicit user: User, lang: Lang)
 
 @import play.api.Play
 @import play.api.Play.current
@@ -23,7 +23,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="fragment" content="!" />
 
-  <title>Jege</title>
+  <title>SteamOff</title>
 
   <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main-" + conf.version + { if (conf.stylesMin) ".min" else "" } + ".css")">
   <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
@@ -39,7 +39,7 @@
         <span class="icon-bar"></span>
       </a>
 
-      <a class="navbar-brand" href="/">Jege</a>
+      <a class="navbar-brand" href="/">SteamOff</a>
 
       <div class="nav-collapse collapse navbar-responsive-collapse">
         <ul class="nav">
@@ -47,11 +47,6 @@
             <a href="/">Home</a>
           </li>
         </ul>
-
-        <form class="navbar-form pull-right">
-          <button class="btn btn-success" data-target="#modalSignin" data-toggle="modal">Sign in</button>
-          <button class="btn btn-primary" data-target="#modalRegister" data-toggle="modal">Register</button>
-        </form>
       </div>
     </div>
   </div>
@@ -59,9 +54,6 @@
   <div class="container">
     <div data-ng-view="view"></div>
   </div>
-
-  @modals.signin()
-  @modals.register()
 
   @if(conf.livereload) {
     <script src="http://localhost:35729/livereload.js?snipver=1" type="text/javascript"></script>

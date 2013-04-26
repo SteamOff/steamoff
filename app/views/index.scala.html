@@ -1,7 +1,8 @@
-@()
+@()(implicit user: User, lang: Lang)
+
 
 @templates.default() {
-  <h1>Welcome on Jege!</h1>
+  <h1>Welcome on SteamOff, @user.name!</h1>
   <p>{{data.test}}</p>
   <p>{{data.number}}</p>
 }
