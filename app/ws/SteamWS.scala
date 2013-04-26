@@ -5,7 +5,6 @@ import play.api.libs.ws.WS
 import play.api.Play
 import scala.concurrent._
 import ExecutionContext.Implicits.global
-
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 
@@ -23,8 +22,7 @@ object SteamWS {
 
   implicit val userGamesReader = (
     (__ \ "game_count").read[Int] and
-      (__ \ "games").read[Seq[Game]]
-    ).tupled
+    (__ \ "games").read[Seq[Game]]).tupled
 
   def getUserInfo(steamID: String): Future[SteamUser] = {
       // TODO: Refactor this using the functional Json API
@@ -44,6 +42,7 @@ object SteamWS {
           (user(0) \ "realname").as[String],
           (user(0) \ "profileurl").as[String],
           avatars,
+          Seq(),
           (user(0) \ "timecreated").as[Int],
           (user(0) \ "loccountrycode").as[String],
           (user(0) \ "loccityid").as[Int].toString)
