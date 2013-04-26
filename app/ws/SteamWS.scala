@@ -27,7 +27,7 @@ object SteamWS {
     ).tupled
 
   def getUserInfo(steamID: String): Future[SteamUser] = {
-      // TODO: Handle failure case
+      // TODO: Refactor this using the functional Json API
       WS.url(USER_INFO_URL_FORMAT.format(steamID)).get().map { response =>
         val user: JsArray = (response.json \ "response" \ "players").as[JsArray]
 
