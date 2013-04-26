@@ -9,7 +9,6 @@ import play.api.libs.json._
 import play.api.libs.functional.syntax._
 
 object SteamWS {
-
   val STEAM_API_KEY = Play.current.configuration.getString("steam_api_key").getOrElse({
     throw new Exception("Couldn't retrive the API key from the configuration file.")
   })
@@ -61,6 +60,11 @@ object SteamWS {
     }
   }
 
+  def getUserWithGames(steamID: String): Future[SteamUser] = {
+    Future.sequence(Seq(getUserInfo(steamID), getGamesOfUser(steamID))).map { userAndGames =>
+      userAndGames(0).asInstanceOf[SteamUser].copy(games = userAndGames(1).asInstanceOf[(Int, Seq[Game])]._2)
+    }
+  }
 }
 
 case class SteamUserNotFoundException() extends Throwable
