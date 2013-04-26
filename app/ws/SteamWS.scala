@@ -1,11 +1,13 @@
 package ws
 
-import models.{AvatarSize, SteamUser}
+import models.{Game, AvatarSize, SteamUser}
 import play.api.libs.ws.WS
 import play.api.Play
 import scala.concurrent._
 import ExecutionContext.Implicits.global
-import play.api.libs.json.JsArray
+
+import play.api.libs.json._
+import play.api.libs.functional.syntax._
 
 object SteamWS {
 
@@ -13,8 +15,16 @@ object SteamWS {
     throw new Exception("Couldn't retrive the API key from the configuration file.")
   })
 
+  // TODO: Refactor this crap
+  val OWNED_GAMES_URL_FORMAT =
+    s"http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=%s&steamid=%s".format(STEAM_API_KEY, "%s")
   val USER_INFO_URL_FORMAT =
     s"http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=%s&steamids=%s".format(STEAM_API_KEY, "%s")
+
+  implicit val userGamesReader = (
+    (__ \ "game_count").read[Int] and
+      (__ \ "games").read[Seq[Game]]
+    ).tupled
 
   def getUserInfo(steamID: String): Future[SteamUser] = {
       // TODO: Handle failure case
@@ -38,6 +48,19 @@ object SteamWS {
           (user(0) \ "loccountrycode").as[String],
           (user(0) \ "loccityid").as[Int].toString)
       }
+  }
+
+  /**
+   * @param steamID The user's SteamID
+   * @return A tuple containing the counter of owned games  and the games' list
+   */
+  def getGamesOfUser(steamID: String): Future[(Int, Seq[Game])] = {
+    WS.url(OWNED_GAMES_URL_FORMAT.format(steamID)).get().flatMap { response =>
+      println(OWNED_GAMES_URL_FORMAT.format(steamID))
+      Json.fromJson[(Int, Seq[Game])](response.json \ "response") map { result =>
+        Future.successful[(Int, Seq[Game])](result)
+      } recoverTotal { e => Future.failed(new RuntimeException(e.toString)) }
+    }
   }
 
 }
