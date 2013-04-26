@@ -21,7 +21,7 @@ POST    /api/v1/match               controllers.Match.make
 GET     /api/*url                   controllers.Application.notFound(url)
 
 ## Steam routes
-POST    /steam/opendIDUrl           controllers.Steam.opendIDUrl
+GET     /steam/opendIDUrl           controllers.Steam.opendIDUrl
 GET     /steam/openIDCallback       controllers.Steam.openIDCallback
 
 ## Auth google APIs
