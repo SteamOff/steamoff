@@ -69,7 +69,8 @@ object Authentication extends Controller {
 
   val scopes = Seq(
     "https://www.googleapis.com/auth/userinfo.email",
-    "https://www.googleapis.com/auth/userinfo.profile"
+    "https://www.googleapis.com/auth/userinfo.profile",
+    "https://www.googleapis.com/auth/calendar"
   )
   val scope = scopes.mkString(" ")
 
