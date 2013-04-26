@@ -47,10 +47,6 @@
             <a href="/">Home</a>
           </li>
         </ul>
-
-        <form class="navbar-form pull-right">
-          <a class="btn btn-success" href="/login">Log IN</a>
-        </form>
       </div>
     </div>
   </div>
@@ -58,9 +54,6 @@
   <div class="container">
     <div data-ng-view="view"></div>
   </div>
-
-  @modals.signin()
-  @modals.register()
 
   @if(conf.livereload) {
     <script src="http://localhost:35729/livereload.js?snipver=1" type="text/javascript"></script>
