@@ -56,7 +56,6 @@ object SteamWS {
    */
   def getGamesOfUser(steamID: String): Future[(Int, Seq[Game])] = {
     WS.url(OWNED_GAMES_URL_FORMAT.format(steamID)).get().flatMap { response =>
-      println(OWNED_GAMES_URL_FORMAT.format(steamID))
       Json.fromJson[(Int, Seq[Game])](response.json \ "response") map { result =>
         Future.successful[(Int, Seq[Game])](result)
       } recoverTotal { e => Future.failed(new RuntimeException(e.toString)) }

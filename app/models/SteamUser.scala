@@ -1,8 +1,10 @@
 package models
 
 object AvatarSize extends Enumeration {
+
   type AvatarSize = Value
   val Normal, Medium, Full = Value
+
 }
 
 case class SteamUser(
@@ -13,5 +15,4 @@ case class SteamUser(
   avatars: Map[AvatarSize.AvatarSize, String],
   joinDate: Int,
   country: String,
-  cityID: String
-)
+  cityID: String)
