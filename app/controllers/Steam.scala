@@ -4,19 +4,25 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import play.api._
 import play.api.mvc.{AsyncResult, Action}
 import play.api.Logger
-import play.api.libs.openid.OpenID
+//import play.api.libs.openid.OpenID
 import play.api.libs.json.JsString
 import play.api.libs.json.Json
+
+import utils.OpenID
+
 
 object Steam extends  ExtController {
   def opendIDUrl = Action { implicit request =>
     Async {
       OpenID.redirectURL(
-        openID = "http://steamcommunity.com/openid",
-        callbackURL = routes.Steam.openIDCallback.absoluteURL(),
-        axRequired = Seq.empty,
-        axOptional = Seq.empty,
-        realm = Some("http://localhost")
+        "http://steamcommunity.com/openid",
+        routes.Steam.openIDCallback.absoluteURL(),
+        claimedId = Some("http://specs.openid.net/auth/2.0/identifier_select"),
+        //Seq("email" -> "http://schema.openid.net/contact/email"),
+        //axRequired = Seq.empty,
+        //axOptional = Seq("email" -> "http://schema.openid.net/contact/email"),
+        //axOptional = Seq.empty,
+        realm = Some(routes.Steam.openIDCallback.absoluteURL())
       )
         .map{ url =>
           Logger.debug(s"Redirect to $url")
