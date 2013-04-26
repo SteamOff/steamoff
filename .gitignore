@@ -16,3 +16,5 @@ dist
 /.settings
 /node_modules
 /public/*
+*.swp
+*.swo
