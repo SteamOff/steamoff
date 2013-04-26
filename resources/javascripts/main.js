@@ -2,7 +2,7 @@
 
 var app = angular.module("app", ["ngResource"])
   .constant("Config", {
-    apiUrl: "http://localhost:9000\:9000/api/v1"
+    apiUrl: "http://localhost:9100\:9100/api/v1"
   })
   .constant("Events", {
 

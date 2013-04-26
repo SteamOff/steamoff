@@ -19,6 +19,7 @@ import scala.concurrent._
 case class User(
   id: BSONObjectID,
   author: Author,
+  steamAccount : Option[SteamUser],
   settings: Settings,
   createdAt: DateTime,
   lastActivityAt : DateTime
@@ -43,7 +44,8 @@ object User extends Model{
       author = author,
       settings = Settings(),
       createdAt = DateTime.now,
-      lastActivityAt = DateTime.now
+      lastActivityAt = DateTime.now,
+      steamAccount = None
     )
   }
 
