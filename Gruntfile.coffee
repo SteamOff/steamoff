@@ -15,7 +15,7 @@ module.exports = (grunt) ->
   path = require("path")
   refreshResetFlag = false
 
-  require('matchdep').filterDev('grunt-*').forEach( (plugin) ->
+  require('matchdep').filter('grunt-*').forEach( (plugin) ->
     grunt.loadNpmTasks plugin
     if renamedTasks[plugin]
       grunt.renameTask(renamedTasks[plugin].original, renamedTasks[plugin].renamed)
