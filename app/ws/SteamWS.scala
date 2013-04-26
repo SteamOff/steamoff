@@ -5,8 +5,7 @@ import play.api.libs.ws.WS
 import play.api.Play
 import scala.concurrent._
 import ExecutionContext.Implicits.global
-import scala.concurrent.duration._
-import play.api.libs.json.{JsArray, JsObject, JsValue}
+import play.api.libs.json.JsArray
 
 object SteamWS {
 
@@ -17,8 +16,7 @@ object SteamWS {
   val USER_INFO_URL_FORMAT =
     s"http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=%s&steamids=%s".format(STEAM_API_KEY, "%s")
 
-  def getUserInfo(steamID: String): SteamUser = {
-    Await.result(
+  def getUserInfo(steamID: String): Future[SteamUser] = {
       // TODO: Handle failure case
       WS.url(USER_INFO_URL_FORMAT.format(steamID)).get().map { response =>
         val user: JsArray = (response.json \ "response" \ "players").as[JsArray]
@@ -40,8 +38,7 @@ object SteamWS {
           (user(0) \ "timecreated").as[Int],
           (user(0) \ "loccountrycode").as[String],
           (user(0) \ "loccityid").as[Int].toString)
-      },
-      10 seconds)
+      }
   }
 
 }
