@@ -2,9 +2,9 @@ package controllers
 
 import play.api.mvc._
 
-object Application extends ExtController {
+object Application extends ExtController with Authentication {
 
-  def main(url: String) = Action {
+  def main(url: String) = GoogleAuthenticated { implicit user => implicit request =>
     Ok(views.html.templates.main())
   }
 
@@ -15,5 +15,4 @@ object Application extends ExtController {
   def notFound(url: String) = Action {
     NotFound
   }
-  
 }
