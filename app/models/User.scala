@@ -19,7 +19,7 @@ import scala.concurrent._
 case class User(
   id: BSONObjectID,
   author: Author,
-  steamAccount : Option[SteamUser],
+  steamAccount : Option[SteamUser] = None,
   settings: Settings,
   createdAt: DateTime,
   lastActivityAt : DateTime
