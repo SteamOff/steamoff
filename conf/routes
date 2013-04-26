@@ -15,6 +15,8 @@ GET     /api/v1/users               controllers.Users.all
 GET     /api/v1/users/:id           controllers.Users.findById(id: String)
 POST    /api/v1/users               controllers.Users.create
 
+POST    /api/v1/match               controllers.Match.make
+
 ## Last API: if not yet found, then 404
 GET     /api/*url                   controllers.Application.notFound(url)
 
