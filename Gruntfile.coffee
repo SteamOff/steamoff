@@ -34,6 +34,7 @@ module.exports = (grunt) ->
         root: "resources"
         less: "<%= config.dir.resources.root %>/less"
         coffee: "<%= config.dir.resources.root %>/coffee"
+        scripts: "<%= config.dir.resources.root %>/javascripts"
         images: "<%= config.dir.resources.root %>/images"
         fonts: "<%= config.dir.resources.root %>/fonts"
       dist:
@@ -51,8 +52,8 @@ module.exports = (grunt) ->
 
   grunt.registerTask("update", ["bowerInstall"])
 
-  grunt.registerTask("build", ["coffeeBuild", "lessBuild", "bower:build", "imagesBuild", "fontsBuild"])
-  grunt.registerTask("dist", ["coffeeDist", "lessDist", "bower:build", "imagesBuild", "fontsBuild", "concat:postDist", "uglify"]) # , "jshint"
+  grunt.registerTask("build", ["coffeeBuild", "lessBuild", "javascriptBuild", "bower:build", "imagesBuild", "fontsBuild"])
+  grunt.registerTask("dist", ["coffeeDist", "lessDist", "javascriptDist", "bower:build", "imagesBuild", "fontsBuild", "concat:postDist", "uglify"]) # , "jshint"
 
   grunt.registerTask("coffeeBuild", ["clean:tmpCoffee", "clean:scripts", "coffee:raw"])
   grunt.registerTask("coffeeDist", ["clean:tmpCoffee", "clean:tmpScripts", "clean:scripts", "coffee:dist"])
@@ -60,8 +61,14 @@ module.exports = (grunt) ->
   grunt.registerTask("lessBuild", ["clean:styles", "recess:raw"])
   grunt.registerTask("lessDist", ["clean:styles", "recess"])
 
+  grunt.registerTask("javascriptBuild", ["copy:javascripts"])
+  grunt.registerTask("javascriptDist", ["copy:javascripts"])
+
   grunt.registerTask("imagesBuild", ["copy:images"])
   grunt.registerTask("fontsBuild", ["copy:fonts"])
+
+  grunt.registerTask("javascripts", ["copy:javascriptsRefresh"])
+
 
   grunt.registerTask("bowerInstall", "Install all bower dependencies", () ->
     verboseLog = if grunt.option("verbose") then grunt.log else grunt.verbose
@@ -118,7 +125,12 @@ module.exports = (grunt) ->
     )
     grunt.config("coffee", coffee)
 
-
+  updateCopyJavascript = (filepath) ->
+    copy = grunt.config("copy") || {}
+    copyJavascripts = copy.javascriptsRefresh || {}
+    copyJavascripts.src = copyJavascripts.files || []
+    copyJavascripts.src.push(filepath.replace("resources/javascripts/", ""))
+    grunt.config("copy", copy)
 
   grunt.event.on("regarde:file", (status, target, filepath) ->
     grunt.verbose.writeln("regarde:file " + status + " - " + target + " - " + filepath)
@@ -131,15 +143,23 @@ module.exports = (grunt) ->
       coffeeRefresh = coffee.refresh || {}
       coffeeRefresh.files = []
       grunt.config("coffee", coffee)
+
+      copy = grunt.config("copy") || {}
+      copyJavascript = copy.javascript || {}
+      copyJavascript.src = []
+      grunt.config("copy", copy)
+
       refreshResetFlag = false
 
     if (filepath && status == "deleted")
       switch target
         when "coffee" then updateCleanRefresh(filepath.replace("resources/coffee", "public/javascripts").replace(".coffee", ".js"))
+        when "javascripts" then updateCleanRefresh(filepath.replace("resources/javascripts", "public/javascripts"))
         else ""
     else if (filepath && !grunt.file.isDir(filepath))
       switch target
         when "coffee" then updateCoffeeRefresh(filepath)
+        when "javascripts" then updateCopyJavascript(filepath)
         else ""
 
   )
@@ -192,6 +212,18 @@ module.exports = (grunt) ->
         cwd: "<%= config.dir.resources.images %>"
         dest: "<%= config.dir.dist.images %>"
         src: ["*"]
+      javascripts:
+        expand: true
+        dot: true
+        cwd: "<%= config.dir.resources.scripts %>"
+        dest: "<%= config.dir.dist.scripts %>"
+        src: ["**/*.js"]
+      javascriptsRefresh:
+        expand: true
+        dot: true
+        cwd: "<%= config.dir.resources.scripts %>"
+        dest: "<%= config.dir.dist.scripts %>"
+        src: []
 
     coffee:
       refresh: {}
@@ -235,6 +267,9 @@ module.exports = (grunt) ->
         jshintrc: ".jshintrc"
       all: ["<%= config.dir.dist.scripts %>/main-<%= config.version %>.js"]
 
+    javascripts:
+      refresh: {}
+
     requirejs:
       dist:
         options:
@@ -247,6 +282,7 @@ module.exports = (grunt) ->
     refresh:
       clean: {}
       coffee: {}
+      javascripts: {}
 
     regarde:
       coffee:
@@ -255,6 +291,9 @@ module.exports = (grunt) ->
       less:
         files: ["resources/less/**/*"]
         tasks: ["lessBuild"]
+      javascripts:
+        files: ["resources/javascripts/**/*"]
+        tasks: ["refresh:javascripts"]
       js:
         files: ["public/javascripts/**/*"]
         tasks: ["livereload"]
