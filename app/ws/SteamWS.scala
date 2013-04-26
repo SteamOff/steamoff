@@ -21,7 +21,6 @@ object SteamWS {
       WS.url(USER_INFO_URL_FORMAT.format(steamID)).get().map { response =>
         val user: JsArray = (response.json \ "response" \ "players").as[JsArray]
 
-        // Sorry guys :'(
         if (user.value.size == 0) throw new SteamUserNotFoundException
 
         val avatars = Map(
