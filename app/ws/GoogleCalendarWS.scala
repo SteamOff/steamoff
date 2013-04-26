@@ -23,8 +23,7 @@ object GoogleCalendarWS {
     implicit val t = AccessToken(accessToken)
 
 
-    val req = url(CALENDAR_LIST)
-      .withQueryString("minAccessRole" -> "owner")
+    val req = url(CALENDAR_LIST).withQueryString("minAccessRole" -> "owner")
     println(req.headers)
     val resp = req.get
     resp.flatMap{
@@ -75,7 +74,7 @@ object GoogleCalendarWS {
 
           resp
 
-          
+
         }.getOrElse(Future.failed(CalendarLookupFailed))
 
 

@@ -10,4 +10,19 @@
   <p>{{data.test}}</p>
   <p>{{data.number}}</p>
   <p>{{user}}</p>
+
+
+  <button id="fight">FIGHT!</button>
+
+  <div id="scheduled" style="display:none">FIGHT SCHEDULED \o/</div>
+
+  <script type="text/javascript">
+    $("#fight").click(function(e){
+      e.preventDefault();
+      $.post("/api/v1/match").then(function(){
+        $("#scheduled").fadeIn();
+      });
+    });
+  </script>
+
 }
