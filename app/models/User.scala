@@ -22,7 +22,9 @@ case class User(
   settings: Settings,
   createdAt: DateTime,
   lastActivityAt : DateTime
-)
+) {
+  def name = author.givenName
+}
 
 object User extends Model{
   lazy val collection = db("users")
