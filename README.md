@@ -63,3 +63,12 @@ If you have the tools installed, here is the standard procedure to start the pro
 - Go to [http://localhost:9000](http://localhost:9000)
 - This will automatically compile the Play project and display the index page of the site
 - Enjoy developping while looking at your browser reloading your code by its own at each modification
+
+
+## Deploy ##
+
+```
+heroku config:set BUILDPACK_URL=https://github.com/SteamOff/heroku-buildpack-scala-grunt.git
+```
+
+

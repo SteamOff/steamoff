@@ -1,13 +1,13 @@
 "use strict"
 
-app = angular.module("app", ["ngResource"])
+var app = angular.module("app", ["ngResource"])
   .constant("Config", {
     apiUrl: "http://localhost:9000\:9000/api/v1"
   })
   .constant("Events", {
 
   })
-  .config(["$routeProvider", ($routeProvider) ->
+  .config(["$routeProvider", function ($routeProvider) {
     $routeProvider
       .when("/", {
         templateUrl: "/views/index",
@@ -16,11 +16,7 @@ app = angular.module("app", ["ngResource"])
       .otherwise({
         redirectTo: "/"
       })
-  ])
-  .config(["$locationProvider", ($locationProvider) ->
+  }])
+  .config(["$locationProvider", function ($locationProvider) {
     $locationProvider.html5Mode(true)
-  ])
-
-class Entity
-
-class Service
+  }]);
