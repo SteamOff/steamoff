@@ -10,9 +10,9 @@ object Match extends ExtController with Authentication {
     GoogleCalendarWS.registerEvent(
       request.session.get("accessToken").get,
       "Left 4 Dead 2",
-      "2013-04-26T19:00:00+02:00",
-      "2013-04-26T20:00:00+02:00",
-      Seq("ast@zenexity.com", "evo@zenexity.com", "pdi@zenexity.com")
+      "2013-04-27T10:00:00+02:00",
+      "2013-04-27T11:00:00+02:00",
+      Seq("aga@zenexity.com", "ast@zenexity.com", "evo@zenexity.com", "pdi@zenexity.com")
     )
     Redirect(routes.Application.main(""))
   }

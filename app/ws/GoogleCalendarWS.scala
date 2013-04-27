@@ -41,18 +41,18 @@ object GoogleCalendarWS {
             "start" -> Json.obj("dateTime" -> start),
             "end" -> Json.obj("dateTime" -> end),
             "summary" -> s"Let's play $game",
-            //"gadget" -> Json.obj(
-            //  //"link" -> "steam://run/8870",
-            //  "link" -> "http://localhost:9100/blah.xml",
-            //  //"display" -> "chip",
-            //  "display" -> "icon",
-            //  "iconLink" -> "http://www.playframework.com/assets/images/favicon.png",
-            //  "title" -> "play now",
-            //  "type" -> "application/x-google-gadgets+xml",
-            //  "width" -> 100,
-            //  "height" -> 100//,
-            //  //"preferences" -> Json.obj()
-            //  ),
+            "gadget" -> Json.obj(
+              "preferences" -> Json.obj("blah" -> "foo"),
+              "display" -> "chip",
+              "type" -> "text/html",
+              "title" -> "play now",
+              "link" -> "https://localhost:9101/match/id",
+              //"link" -> "http://localhost:9100/",
+              "iconLink" -> "https://www.google.fr/images/google_favicon_128.png",
+              "width" -> 300,
+              "height" -> 300
+              //"link" -> "steam://run/8870",
+              ),
             "reminders" -> Json.obj(
               "useDefault" -> false,
               "overrides" -> Json.arr(
